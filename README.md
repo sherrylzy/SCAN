@@ -5,7 +5,7 @@
 
 ## 1.1 Comparison of Performance Trends with Varying Noise Ratios
 
-![image.png](V-M.png)
+![V-M.jpg](Analysis_of_varing noise ration/V-M.jpg)
 
 ## 1.2 Detailed Per-Machine Results under Highest 8% Noise
 

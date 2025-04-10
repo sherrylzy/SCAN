@@ -1,93 +1,20 @@
 # SCAN: Selective Contrastive Learning Against Noisy Data for Acoustic Anomaly Detection
 
-This page provides additional experiments, visualizations, and analyses for our SCAN framework, focusing on the robustness of noisy data in acoustic anomaly detection.
 
----
-## Table of Contents
-- [2. Visualization of Latent Representations](#2-visualization-of-latent-representations)
-  - [2.1 Over Training Epochs](#21-over-training-epochs)
-  - [2.2 Different Noise Ratios](#22-different-noise-ratios)
-- [4. Per-Category / Per-Machine Results](#4-per-category--per-machine-results)
-  - [4.1 Machine-wise Performance Breakdown](#41-machine-wise-performance-breakdown)
-  - [4.2 Domain Shift Analyses](#42-domain-shift-analyses)
+# 1. Robustness with Varying Noise Ratios
 
----
+## 1.1 Comparison of Performance Trends with Varying Noise Ratios
 
-## 2. Visualization of Latent Representations
+![image.png](SCAN%20Selective%20Contrastive%20Learning%20Against%20Noisy%20%201d184d2106c9806da023e4824b3cc5b2/image.png)
 
-### 2.1 Over Training Epochs
-**(Explain how you visualize the latent feature space at different training epochs — e.g., 1, 100, 200, 400. Provide charts or t-SNE/UMAP plots here.)**
+## 1.2 Detailed Per-Machine Results under Highest 8% Noise
 
-<details>
-<summary>Example Discussion</summary>
-
-- **Motivation**: Illustrate how latent representations of normal and abnormal samples evolve over time.
-- **Method**: At selected epochs (1, 100, 200, 400), we extract features and apply dimensionality reduction (t-SNE/UMAP).  
-- **Observation**: Early in training, points may be interspersed; by later epochs, clusters (normal vs. abnormal) become more distinct.
-
-*Insert your figures or GIFs here.*
-</details>
-
----
-
-### 2.2 Different Noise Ratios
-**(Show side-by-side comparisons under 0%, 2%, and 8% noise. You might have 3 sets of t-SNE/UMAP plots for each epoch.)**
-
-<details>
-<summary>Example Discussion</summary>
-
-- **Motivation**: Show how increasing label noise impacts the feature space.  
-- **Method**: Train separate models at noise ratios = 0%, 2%, 8%. At each ratio, visualize latent representations at the same chosen epochs.  
-- **Observation**: With higher noise, the decision boundary may blur; SCAN’s selecting mechanism should help keep normal and abnormal clusters more separated.
-
-*Insert your figures or side-by-side comparisons here.*
-</details>
-
----
-
-## 4. Per-Category / Per-Machine Results
-
-### 4.1 Machine-wise Performance Breakdown
-**(Present detailed metrics — e.g., AUC, Precision, F1 — per machine type. Discuss which machine types are most sensitive to noise.)**
-
-<details>
-<summary>Example Table or Chart</summary>
-
-| Machine Type | AUC @0% Noise | AUC @2% Noise | AUC @8% Noise |
-|:------------:|:------------:|:------------:|:------------:|
-| Bearing      | 0.XX         | 0.XX         | 0.XX         |
-| Fan          | 0.XX         | 0.XX         | 0.XX         |
-| ...          | ...          | ...          | ...          |
-
-- **Discussion**: 
-  - Identify which machine categories degrade more drastically with increased noise.  
-  - Hypothesize reasons for differences (e.g., some signals are inherently more variable, etc.).
-
-*Alternatively, include a bar chart or multiple bar charts for each noise ratio, grouped by machine type.*
-</details>
-
----
-
-### 4.2 Domain Shift Analyses
-**(Break down performance for source vs. target domains — or multiple domain shifts, if available. Compare how SCAN adapts under each condition.)**
-
-<details>
-<summary>Example Domain Shift Table</summary>
-
-| Domain        | AUC @0% Noise | AUC @2% Noise | AUC @8% Noise |
-|:-------------:|:-------------:|:-------------:|:-------------:|
-| Source        | 0.XX          | 0.XX          | 0.XX          |
-| Target        | 0.XX          | 0.XX          | 0.XX          |
-
-- **Discussion**: 
-  - Show how SCAN handles real-world changes (machine operator changes, environment differences, etc.).  
-  - If performance drops drastically in the target domain, discuss the root causes and potential improvements.
-
-</details>
-
----
-
-_You can add extra sections if needed, such as “**Conclusions**,” “**Hyperparameter Settings**,” or “**Runtime Analysis**.”_
-
-Feel free to modify the above outline, add figures, code blocks, or more detailed descriptions depending on your results. This provides a clean structure for readers to navigate your extended experimental findings.
-
+| Method | Source Domain  | Target Domain  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | **Fan** | **Gearbox** | **Slider** | **Valve** | **Bearing** | **Ave** | **Fan** | **Gearbox** | **Slider** | **Valve** | **Bearing** | **Ave** |
+| AE-AAD | 62.48 | 65.61 | 70.27 | 48.99 | 53.76 | 60.222 | 50.8 | 57.63 | 49.05 | 54.14 | 54.32 | 53.19 |
+| MobileNetV2 | 65.46 | 63.83 | 60.11 | 65.1 | 60.47 | 62.994 | 53.95 | 59.89 | 48.17 | 61.43 | 60.31 | 56.75 |
+| IDNN | 64.91 | 64.6 | 70.58 | 71.63 | 72.21 | 68.786 | 60.95 | 61.87 | 66.01 | 66.94 | 58.68 | 62.89 |
+| AADCL | 73.05 | 71.27 | 72.29 | 74.89 | 74.65 | 73.23 | 70.77 | 72.26 | 69.93 | 71.27 | 71.39 | 71.12 |
+| CLF-AIAD | 78.65 | 76.91 | 76.12 | 72.42 | 75.99 | 76.018 | 71.88 | 75.36 | 70.09 | 71.71 | 73.96 | 72.6 |
+| proposed SCAN-8% | 80.59 | 77.43 | 76.48 | 76.57 | 80.52 | 78.318 | 73.06 | 75.93 | 75.77 | 75.33 | 74.53 | 74.924 |

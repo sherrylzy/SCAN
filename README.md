@@ -5,11 +5,11 @@
 
 ## 1.1 Comparison of Performance Trends with Varying Noise Ratios
 
-![image.png](SCAN%20Selective%20Contrastive%20Learning%20Against%20Noisy%20%201d184d2106c9806da023e4824b3cc5b2/image.png)
+![image.png](V-M.png)
 
 ## 1.2 Detailed Per-Machine Results under Highest 8% Noise
 
-| Method | Source Domain  | Target Domain  |
+| Method | Source Domain |  |  |  |  |  | Target Domain |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | **Fan** | **Gearbox** | **Slider** | **Valve** | **Bearing** | **Ave** | **Fan** | **Gearbox** | **Slider** | **Valve** | **Bearing** | **Ave** |
 | AE-AAD | 62.48 | 65.61 | 70.27 | 48.99 | 53.76 | 60.222 | 50.8 | 57.63 | 49.05 | 54.14 | 54.32 | 53.19 |

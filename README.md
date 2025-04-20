@@ -12,7 +12,7 @@ The figure presents a comparison of performance trends on source and target doma
 
 The figure below presents detailed AUC performance for each machine type under the highest noise ratio (8%), comparing baseline methods, advanced CL-based approaches, and our proposed SCAN.
 
-![image.png](image%201.png)
+![Detailed Per-Machine Results under Highest 8% Noise](/results/Detailed%20Per-Machine%20Results%20under%20Highest%208%25%20Noise.png)
 
 ## 1.3 Visualisation
 
@@ -20,15 +20,17 @@ The figure below presents detailed AUC performance for each machine type under t
 
 t-SNE visualisations of extracted features from the bearing test data under 8% label noise are presented to compare the representation quality of AE-AAD, MobileNetV2, AADCL, CLF-AIAD, and our proposed SCAN, as shown in the figures below.  The proposed SCAN produces more distinct features, indicating its superior ability to capture latent representations under noisy data conditions.
 
-![image.png](image%202.png)
+![t-SNE Over different approach-1](/results/t-SNE%20Over%20different%20approach-1.png)
 
-![image.png](image%203.png)
+![t-SNE Over different approach-2](/results/t-SNE%20Over%20different%20approach-2.png)
+
 
 ### 1.3.2 Over different Epochs
 
 t-SNE visualizations of extracted features from the bearing test data under 8% label noise are presented for the proposed SCAN at 100, 200, 300, and 400 training epochs. As the number of training epochs increases, the feature clusters become progressively more structured and separated. At 400 epochs, SCAN shows the most distinct feature distribution, corresponding to its best performance.
 
-![image.png](image%204.png)
+![t-SNE Over different Epochs](/results/t-SNE%20Over%20different%20Epochs.png)
+
 
 # 2. Comparison to Top-performing Systems
 
@@ -55,10 +57,12 @@ First, SCAN w/o selecting experiences a sharp decline as noise increases, unders
 
 Comparison of performance trends on source and target domains for the proposed SCAN and its variations for increasing noise ratios (0% to 8%).
 
-![image.png](image%205.png)
+![Comparison of Performance Trends with SCAN’S variants](/results/Comparison%20of%20Performance%20Trends%20with%20Varying%20Noise%20Ratios%20with%20SCAN%E2%80%99S%20variants.png)
+
 
 ## 3.2 Detailed Per-Machine Results on DCASE2022/DCASE2024 under Highest 8% Noise
 
-![dcase2022_per_machine_8percent_noise.png](dcase2022_per_machine_8percent_noise.png)
+![DCASE2022 Per-Machine 8% Noise](/results/dcase2022_per_machine_8percent_noise.png)
 
-![dcase2024_detailed_per_machine_8percent_noise.png](dcase2024_detailed_per_machine_8percent_noise.png)
+![DCASE2024 Detailed Per-Machine 8% Noise](/results/dcase2024_detailed_per_machine_8percent_noise.png)
+

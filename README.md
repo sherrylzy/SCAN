@@ -6,7 +6,7 @@
 
 The figure presents a comparison of performance trends on source and target domains for the proposed SCAN, baselines, and advanced methods with increasing noise ratios (0% to 8%).
 
-![image.png](image.png)
+![Comparison of Performance Trends](../results/Comparison%20of%20Performance%20Trends%20with%20Varying%20Noise%20Ratios.png)
 
 ## 1.2 Detailed Per-Machine Results under Highest 8% Noise
 

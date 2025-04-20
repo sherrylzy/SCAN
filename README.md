@@ -4,7 +4,7 @@
 
 ## 1.1 Comparison of Performance Trends with Varying Noise Ratios
 
-Figure presents comparison of performance trends on source and target domains for the proposed SCAN, baselines, and advanced methods with increasing noise ratios (0% to 8%).
+The figure presents a comparison of performance trends on source and target domains for the proposed SCAN, baselines, and advanced methods with increasing noise ratios (0% to 8%).
 
 ![image.png](image.png)
 
@@ -14,11 +14,11 @@ The figure below presents detailed AUC performance for each machine type under t
 
 ![image.png](image%201.png)
 
-## 1.3 visualization
+## 1.3 Visualisation
 
-### 1.3.1 Over different approach
+### 1.3.1 Over different approaches
 
-t-SNE visualizations of extracted features from the bearing test data under 8% label noise are presented to compare the representation quality of AE-AAD, MobileNetV2, AADCL, CLF-AIAD, and our proposed SCAN as shown in below figures.  The proposed SCAN produces more distinct features, indicating its superior ability to capture latent representations under noisy data conditions.
+t-SNE visualisations of extracted features from the bearing test data under 8% label noise are presented to compare the representation quality of AE-AAD, MobileNetV2, AADCL, CLF-AIAD, and our proposed SCAN, as shown in the figures below.  The proposed SCAN produces more distinct features, indicating its superior ability to capture latent representations under noisy data conditions.
 
 ![image.png](image%202.png)
 
@@ -49,12 +49,16 @@ To evaluate the effectiveness of the proposed method, ablation experiments were 
 
 (3)**SCAN w/ mean**, which uses the mean vector instead of the geometric median for Mahalanobis distance calculation.
 
-## 3.1 Comparison of Performance Trends with Varying Noise Ratios with SCAN’S variants
+First, SCAN w/o selecting experiences a sharp decline as noise increases, underscoring the importance of noise mitigation strategies. Second, SCAN without a balance factor further deteriorates under high noise conditions and across different datasets, emphasising the need for progressively increasing threshold confidence to enhance acoustic representation learning and model stability. Lastly, SCAN with mean underperforms the geometric median, which offers better robustness in real-world scenarios.
 
-Comparison of performance trends on source and target domains for the proposed SCAN and its variations for increasing noise ratios (0% to 8%)
+## 3.1 Comparison of Performance Trends with Varying Noise Ratios with SCAN’s variants
+
+Comparison of performance trends on source and target domains for the proposed SCAN and its variations for increasing noise ratios (0% to 8%).
 
 ![image.png](image%205.png)
 
-## 3.2
+## 3.2 Detailed Per-Machine Results on DCASE2022/DCASE2024 under Highest 8% Noise
 
 ![dcase2022_per_machine_8percent_noise.png](dcase2022_per_machine_8percent_noise.png)
+
+![dcase2024_detailed_per_machine_8percent_noise.png](dcase2024_detailed_per_machine_8percent_noise.png)

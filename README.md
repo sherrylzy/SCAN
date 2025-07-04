@@ -81,16 +81,16 @@ The reliability of Mahalanobis distance-based anomaly detection hinges on a stab
 
 To overcome this vulnerability, we use the geometric median to establish a robust reference point. Unlike the mean, the geometric median minimizes the L1 distance, making it significantly more resilient to outliers. This ensures the reference center accurately represents the core distribution of normal data. As the t-SNE visualization below demonstrates, this method yields more compact clusters of normal embeddings and achieves a clearer separation from anomalies.
 
-The reliability of Mahalanobis distance-based anomaly detection hinges on an exceptionally stable reference center. Many previous methods in anomalous sound detection use the arithmetic mean as this center. However, the mean minimizes squared deviations, a property that makes it highly sensitive to outliers; even a few extreme embeddings from label errors or sensor faults can pull the center away from the true distribution of normal data.
+The reliability of Mahalanobis distance-based anomaly detection hinges on an exceptionally stable reference center. Many previous methods in anomalous sound detection use the arithmetic mean as the center. However, the mean minimizes squared deviations, a property that makes it highly sensitive to outliers; even a few extreme embeddings from label errors or sensor faults can pull the center away from the true distribution of normal data.
 
 To overcome this, we employ the **geometric median**, which establishes a more robust reference point due to two fundamental properties:
 
 1. **Outlier-Resistant Centering:** Unlike the mean, the geometric median minimizes the sum of absolute distances (L1). This ensures that each outlier’s influence is proportional to its distance, not its squared distance. As a result, extreme points have a limited and controlled impact on the estimated center.
 2. **High Breakdown-Point Guarantee:** An estimator’s robustness can be measured by its breakdown point—the smallest fraction of bad data needed to corrupt its estimate. The arithmetic mean has a breakdown point of 0%, as a single outlier can shift it arbitrarily far. In contrast, the geometric median possesses a breakdown point of 50%, the highest possible value. This guarantees that the center remains anchored by the majority of genuine normal embeddings, even under heavy data contamination.
 
-The practical benefit of this stability is evident in our below t-SNE visualizations, which show that using the geometric median produces more compact clusters for normal embeddings and achieves a clearer separation from anomalies.
+The practical benefit of this stability is evident in the t-SNE visualizations below, which show that using the geometric median produces more compact clusters for normal embeddings and achieves a clearer separation from anomalies.
 
-![image.png](image%207.png)
+![C-Mean.png](/results/C-Mean.png)
 
 ## 4.3 Analysis of Core Hyperparameter
 
@@ -98,7 +98,7 @@ The key hyperparameter in our work is the confidence level $\alpha$ in Equation 
 
 Lower thresholds ($\alpha \le 0.03$) tend to under-filter noise, while higher thresholds ($\alpha \ge 0.08$) risk over-filtering and discarding informative normal variations. Both scenarios degrade performance. Therefore, we adopt $\alpha = 0.05$ in our experiments, as it strikes the best balance between noise rejection and data diversity under varied conditions.
 
-![image.png](image%208.png)
+![parameter.png](/results/parameter.png)
 
 # 5. Implementation Details
 
@@ -108,9 +108,9 @@ The confidence level is set to α=0.05, while the temperature parameter t is emp
 
 # 6. Conclusion & Discussion
 
-To address the pervasive challenge of noisy data in real-world anomaly detection, we introduced SCAN, a selective contrastive learning framework. By employing the Mahalanobis distance with the highly robust geometric median, SCAN effectively identifies potential noise and progressively constructs a set of confident positive pairs. This allows it to learn discriminative latent representations within a contrastive learning framework, even when the training data is corrupted. Our extensive experiments have demonstrated the state-of-the-art (SOTA) performance of SCAN, benchmarking it against top-ranked AUC methods from both the DCASE 2022 and 2024 Task 2 challenges to ensure a fair and direct comparison.
+To address the pervasive challenge of noisy data in real-world anomaly detection, we introduced SCAN, a selective contrastive learning framework. By employing the Mahalanobis distance with the highly robust geometric median, SCAN effectively identifies potential noise and progressively constructs a set of confident positive pairs. This allows it to learn discriminative latent representations within a contrastive learning framework, even when the training data is corrupted. Our extensive experiments have demonstrated the state-of-the-art performance of SCAN, benchmarking it against top-ranked AUC methods from both the DCASE 2022 and 2024 Task 2 challenges to ensure a fair and direct comparison.
 
-While SCAN has demonstrated state-of-the-art performance, it represents a foundational step. We believe there are several exciting and critical directions for future research and development to make the framework more robust, scalable, and adaptable. We welcome discussion, ideas, and contributions in these areas.
+While SCAN has demonstrated state-of-the-art performance under current settings, it represents a foundational step. We believe there are several exciting and critical directions for future research and development to make the framework more robust, scalable, and adaptable. We welcome discussion, ideas, and contributions in these areas.
 
 ### 6.1. Enhancing Scalability and Computational Efficiency
 

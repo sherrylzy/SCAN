@@ -100,7 +100,42 @@ Lower thresholds ($\alpha \le 0.03$) tend to under-filter noise, while higher th
 
 ![parameter.png](/results/parameter.png)
 
-# 5. Implementation Details
+# 5. More details related to Implementation Details
+
+## 5.1 Whether SCAN implies the assumption of distribution in the feature space?
+
+The proposed SCAN adopts the Mahalanobis distance as the core scoring function for anomaly detection, so it implicitly assumes that the distribution of normal embeddings forms a compact, approximately ellipsoidal cluster in feature space [19]–[21]. While this assumption avoids the need for precise parametric modeling, the method is designed to be robust against deviations from this idealized distribution.
+
+## 5.2 Why the Marginal Distance and Geometric Median can distinguish abnormal samples from normal samples more effectively in practice?
+
+The combination of the geometric median and the Mahalanobis distance offers enhanced robustness and discriminative power in AAD for the following reasons:
+
+i) **Distribution-aware Distance Metric.** AAD systems often encode each sound clip into the embedding space and detect anomalies by the distance from the embedding to the normal-sound center. Mahalanobis distance rescales each dimension according to the covariance matrix, capturing the true shape of the cluster, however, the previous widely adopted Euclidean distance weights all dimensions equally and ignores the correlations among them. In high-dimensional space, most variance concentrates on a few principal components, leaving small eigenvalues in the remaining directions. The Mahalanobis distance thus amplifies deviations along these low-variance axes, where anomalies often appear, while the Euclidean distance is comparatively insensitive.
+
+ii) **Robust Centre Estimation.** A stable reference center is essential for the Mahalanobis distance-based anomaly detection, as even a few mislabeled or device-specific samples can shift the center and degrade the reliability of the scores. The geometric median, which minimizes the L1 distance, is significantly more robust to outliers than the arithmetic mean, helping to maintain alignment with the core of the normal distribution. We provide further clarification in the previous Section III of this response letter. As shown in Session 4.2, SCAN using the geometric median produces a tighter group of normal embeddings and a clearer separation from anomalies.
+
+## 5.3 why the geometric median is expected to enhance robustness
+
+1. **Why a stable reference centre is essential in AAD?**
+
+Most AAD systems convert each sound clip into a latent embedding and then assign an anomaly score by measuring how far that embedding deviates from a “normal-sound” centre (e.g., via Mahalanobis or Euclidean distance). If this reference centre is unstable, i.e., moving in the scenario where a few mislabeled or device-specific samples contaminate the training pool, two problems may arise:
+
+i) Increased false alarms and miss detections: A centre biased toward outliers increases distances for some normal clips (raising false positives) and reduces distances for real anomalies (raising false negatives) \cite{Dcase2022, dcase2024, zavrtanik2024anomalous, ikegami2024anomalous}.
+
+ii) Domain shift issue \cite{Dcase2022}: Industrial environments often vary in background noise, microphone placement, or machine loading. A centre that is easily perturbed fails to generalise across these domain shifts, undermining deployment to new conditions.
+However, a robust estimator remains anchored on genuine normal embeddings, thereby mitigating the above issues.
+
+1. **Why the geometric median is robust for obtaining a stable reference centre in AAD?**
+
+i) Outlier-resistant centring:
+Most previous AAD methods \cite{Dcase2022, dcase2024, zavrtanik2024anomalous, ikegami2024anomalous} use the arithmetic mean, which weights squared deviations and can be pulled toward a few extreme embeddings (e.g., from label errors or sensor recording faults). In contrast, the geometric median minimises the sum of absolute distances (\(L_1\)), so each outlier contributes proportionally rather than quadratically. As a result, even extreme points have limited influence on the estimated centre.
+
+ii) High breakdown-point guarantee:
+An estimator’s breakdown point is the smallest fraction of bad data needed to drive it arbitrarily far. The arithmetic mean breaks down with any single outlier (breakdown point 0\%), whereas the geometric median tolerates up to half the data being corrupted before failing (breakdown point 50\%). This quantitative robustness ensures that, even under heavy contamination, the centre remains anchored by the majority of genuine normal embeddings.
+
+[Fletcher 2008] P. T. Fletcher, S. Venkatasubramanian, and S. Joshi, “Robust statistics on Riemannian manifolds via the geometric median,” in 2008 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Anchorage, AK, USA, 2008, pp. 1–8, doi:10.1109/CVPR.2008.4587747.
+
+## 5.4 Implementation Details
 
 The input feature is the mel spectrogram, computed using a Hann window of length 2048 with 50% overlap and 128 mel filter banks. The encoder E(⋅) is based on the ResNet-18 architecture [1], generating a 512-dimensional linear output vector. To further refine the latent space, a projection head, implemented as a Multi-Layer Perceptron (MLP), consists of a 512-unit hidden layer followed by a 128-unit output layer, producing the final representation vectors.
 
@@ -108,16 +143,16 @@ The confidence level is set to α=0.05, while the temperature parameter t is emp
 
 # 6. Conclusion & Discussion
 
-To address the pervasive challenge of noisy data in real-world anomaly detection, we introduced SCAN, a selective contrastive learning framework. By employing the Mahalanobis distance with the highly robust geometric median, SCAN effectively identifies potential noise and progressively constructs a set of confident positive pairs. This allows it to learn discriminative latent representations within a contrastive learning framework, even when the training data is corrupted. Our extensive experiments have demonstrated the state-of-the-art performance of SCAN, benchmarking it against top-ranked AUC methods from both the DCASE 2022 and 2024 Task 2 challenges to ensure a fair and direct comparison.
+To address the pervasive challenge of noisy data in real-world anomaly detection, we introduced SCAN, a selective contrastive learning framework. By employing the Mahalanobis distance with the highly robust geometric median, SCAN effectively identifies potential noise and progressively constructs a set of confident positive pairs. This allows it to learn discriminative latent representations within a contrastive learning framework, even when the training data is corrupted. Our extensive experiments have demonstrated the state-of-the-art (SOTA) performance of SCAN, benchmarking it against top-ranked AUC methods from both the DCASE 2022 and 2024 Task 2 challenges to ensure a fair and direct comparison.
 
-While SCAN has demonstrated state-of-the-art performance under current settings, it represents a foundational step. We believe there are several exciting and critical directions for future research and development to make the framework more robust, scalable, and adaptable. We welcome discussion, ideas, and contributions in these areas.
+While SCAN has demonstrated state-of-the-art performance, it represents a foundational step. We believe there are several exciting and critical directions for future research and development to make the framework more robust, scalable, and adaptable. We welcome discussion, ideas, and contributions in these areas.
 
 ### 6.1. Enhancing Scalability and Computational Efficiency
 
 A key practical limitation of the current implementation is its computational overhead on very large datasets. The need to compute the geometric median and the full covariance matrix for all samples at each epoch is a bottleneck.
 
 - **The Challenge:** These calculations do not scale linearly with the number of samples (`N`) and can be prohibitive for datasets with millions of entries, limiting SCAN's applicability in large-scale industrial settings.
-- **Proposed Solutions:**
+- **Future work direction:**
     - **Stochastic/Mini-Batch Approximations:** Instead of using the entire dataset, we plan to investigate methods for stably approximating the geometric median and covariance matrix from mini-batches. This involves exploring how to reduce the variance of these estimates to ensure the Mahalanobis distance calculation remains reliable.
     - **Online/Streaming Algorithms:** We will explore online algorithms that can update the center and covariance matrix incrementally with each new batch of data, rather than recomputing them from scratch. This would drastically reduce per-epoch computation time.
     - **Low-Rank Covariance Approximations:** For high-dimensional embeddings, the full covariance matrix is costly to store and invert. We will research the use of low-rank approximations to make these operations more tractable.
@@ -128,7 +163,7 @@ A key practical limitation of the current implementation is its computational ov
 The current framework relies on a fixed confidence threshold `$\alpha$`, which may not be optimal for all datasets or throughout the entire training process.
 
 - **The Challenge:** A single threshold creates a rigid trade-off. It may be too lenient for data with subtle noise or too aggressive for data with diverse but normal variations, potentially discarding useful samples.
-- **Proposed Solutions:**
+- **Future work direction:**
     - **Dynamic Threshold Schedules:** We propose investigating "confidence annealing" schedules, where the threshold `$\alpha$` is dynamically adjusted during training. For instance, the threshold could start high (more lenient) in early epochs when the model is still learning basic features and gradually become stricter as the latent space becomes more stable.
     - **Multi-Metric Filtering:** Relying solely on Mahalanobis distance might not capture all aspects of "abnormality." We plan to create a more sophisticated filtering mechanism by combining it with other metrics. A promising direction is to fuse it with **cosine distance**, which could help differentiate samples that are semantically distinct even if they are not statistical outliers in the Mahalanobis sense.
     - **Per-Cluster Adaptation:** For complex datasets where normal data consists of multiple operating modes (e.g., a machine at different speeds), we could first perform a lightweight clustering of the embeddings and then apply a separate SCAN selection mechanism within each cluster.
@@ -138,7 +173,7 @@ The current framework relies on a fixed confidence threshold `$\alpha$`, which m
 SCAN currently trains its encoder (ResNet-18) from scratch. The initial training phase, where the model learns basic features, can be unstable, making the confident-pair selection less reliable at the start.
 
 - **The Opportunity:** Using powerful, pre-trained audio foundation models (e.g., PANNs, BEATs, AST) can provide a much stronger and more stable feature representation from epoch one.
-- **Proposed Solutions:**
+- **Future work direction:**
     - **Transfer Learning Strategies:** We will experiment with using pre-trained audio encoders as the backbone for SCAN. This includes exploring different strategies like freezing the backbone and only training the projection head versus fine-tuning the entire model with a small learning rate.
     - **Impact on Convergence:** We hypothesize that this will not only improve the final AUC but also significantly speed up convergence and make the selection of confident pairs more robust from the very beginning.
 
@@ -147,8 +182,5 @@ SCAN currently trains its encoder (ResNet-18) from scratch. The initial training
 To fully understand SCAN's capabilities and limitations, we need to test it against a wider array of challenges.
 
 - **The Goal:** Move beyond the current datasets to establish more comprehensive and generalized performance claims.
-- **Proposed Solutions:**
-    - **Comparison with Diverse Robust Methods:** Benchmark SCAN against robust learning methods from other fields (e.g., noisy label learning in computer vision) that have been adapted for the audio domain.
-    - **Controlled Noise Studies:** Conduct experiments on datasets with synthetically injected noise of various types (e.g., Gaussian, environmental, impulsive) and at precisely controlled signal-to-noise or corruption ratios.
-    - **Cross-Dataset Generalization Tests:** Evaluate the model's ability to generalize by training it on one type of machine/environment and testing it on another, which is a critical test for real-world deployment.
+- **Future work direction: Comparison with Diverse Robust Methods.** Benchmark SCAN against robust learning methods from other fields (e.g., noisy label learning in computer vision) that have been adapted for the audio domain.
 

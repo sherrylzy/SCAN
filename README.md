@@ -100,7 +100,8 @@ Lower thresholds ($\alpha \le 0.03$) tend to under-filter noise, while higher th
 
 ![parameter.png](/results/parameter.png)
 
-# 5. More details related to Implementation Details
+# 5. Robustness Justification of SCAN and Implementation Details
+
 
 ## 5.1 Whether SCAN implies the assumption of distribution in the feature space?
 
